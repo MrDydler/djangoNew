@@ -6,9 +6,18 @@
   text-align: center;
   font-family: Cursive;
   width: 100%; /* Adjust the width as needed */
-  margin: auto;
+  margin: 20px;
   border-radius:30px;
   Color: white ;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.buttons-text{
+  align-items:right;
+  text-align: right;
+  font-family: Cursive;
+  
 }
 
 
@@ -20,6 +29,8 @@
   border-radius: 30px;
   height: 300px;
   opacity: 0.93;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 /* Style for the product list */
@@ -157,18 +168,24 @@
   left: 45%;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+.show {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(23, 11, 11);
+  text-align: center;
+  width: 400px;
+  height: 400px;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999
+    }
 
 .about-us {
   background: fixed;

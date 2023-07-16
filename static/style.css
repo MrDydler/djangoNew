@@ -6,9 +6,19 @@
   text-align: center;
   font-family: Cursive;
   width: 100%; /* Adjust the width as needed */
-  margin: auto;
+  
   border-radius:30px;
   Color: white ;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.buttons-text{
+  align-items:right;
+  text-align: right;
+  font-family: Cursive;
+  display: flex;
+
 }
 
 
@@ -20,6 +30,8 @@
   border-radius: 30px;
   height: 300px;
   opacity: 0.93;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 /* Style for the product list */
@@ -85,8 +97,8 @@
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  min-height: 350px;
-  min-width: 350px;
+  min-height: 250px;
+  min-width: 250px;
   border-radius:10px;
 }
 
@@ -108,6 +120,75 @@
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 20px;
 }
+
+
+/* .registration-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(67, 70, 65);
+  text-align: center;
+  width: 800px;
+  height: 400px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.registration-container label {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.registration-container input,
+.registration-container textarea {
+  width: 80%;
+  padding: 5px;
+  border: 3px solid white;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.registration-container button {
+  margin-top: auto;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  left: 45%;
+} */
+
+.show {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(23, 11, 11);
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999
+    }
+
+
 .about-us {
   background: fixed;
   background-image: url("djangoProject/media/background/footer.jpg");
@@ -128,12 +209,91 @@
   align-items: center;
 }
 
+.authorization-button {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  z-index: 9999;
+}
 
-  /*align-self: center; уменьшить по центру/* 
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.form-field label {
+  text-align: center;
+}
+
+.form-field input {
+  text-align: center;
+}
 
 
+.registration-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(67, 70, 65);
+  text-align: center;
+  width: 800px;
+  height: 400px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.registration-container label {
+  display: block;
+  margin-top: 10px;
+  text-align:center;
+}
+.registration-container input,
+.registration-container textarea {
+  width: 80%;
+  padding: 5px;
+  border: 3px white;
+  border-radius: 5px;
+  text-align:center;
+}
+.registration-container button {
+  margin-top: auto;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  left:45%;
 
-/* Style for the "About Us" section */
+}
 
+.overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+ z-index: 1;
+ display: none;
+ justify-content: center;
+ align-items: center;
+  }
 
-
+.registration-button {
+  position: absolute;
+  top: 25px;
+  right: 130px;
+  z-index: 9999;
+}
+  

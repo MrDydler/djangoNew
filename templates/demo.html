@@ -6,132 +6,58 @@
     {% block css_additional%}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     {% endblock %}
-    <style>
-        /* buyButton style */
-        .registration-container {
-            /* Existing styles */
-            /* Add the following styles to center the container */
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            border: 3px solid #ccc;
-            border-radius: 30px;
-            background-color: rgb(67, 70, 65);
-            text-align: center;
-            width: 800px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .registration-container label {
-            display: block;
-            margin-top: 10px;
-            text-align:center;
-        }
-
-        .registration-container input,
-        .registration-container textarea {
-            width: 80%;
-            padding: 5px;
-            border: 3px white;
-            border-radius: 5px;
-            text-align:center;
-        }
-
-        .registration-container button {
-            margin-top: auto;
-            margin-bottom: 10px;
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            bottom: 10px;
-            left:45%;
-
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
-            z-index: 9999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
 </head>
-<body>
+        
+
+
+        <button id="open-form-button" onclick="toggleForm()" class="buttons-text authorization-button">Авторизация</button>
     <div class="header">
         <h1>Jevelry World</h1>
+        <!-- djangoForm -->
+        
+            <div id="form-container" class='show' style="display: none;" >
+                <form method="post" action="{% url 'form_submit' %}">
+                {% csrf_token %}
+                <!-- поля фомры -->
+
+                <div class = "form-field">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                
+                <div class = "form-field">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password1" name="password1">
+                </div>  
+                
+                <div class = "form-field">
+                    <label for="password2">Повторите пароль:</label>
+                    <input type="password" id="password2" name="password2">
+                </div>
+                
+                <button type="submit" onclick="registrationAccepted()">РЕГИСТРАЦИЯ</button>
+        
+                </form>
+            </div>
+            <div class="overlay" id="overlay"></div>
     </div>
 
     <div class="background-image"></div>
 
-<!-- djangoForm -->
-<button id="open-form-button" onclick="toggleForm()">Open Form</button>
-
-<div id="form-container" style="display: none;" class='show'>
-    <form method="post" action="{% url 'form_submit' %}">
-        {% csrf_token %}
-        <!-- поля фомры -->
-
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username">
-
-        <label for="password">Пароль:</label>
-        <input type="password" id="password1" name="password1">
-
-        <label for="password2">Повторите пароль:</label>
-        <input type="password" id="password2" name="password2">
-
-        <button type="submit" onclick="registrationAccepted()">Submit</button>
-
-    </form>
-</div>
-<!-- показывать форму -->
-<style>
-    .show {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  border: 3px solid #ccc;
-  border-radius: 30px;
-  background-color: rgb(23, 11, 11);
-  text-align: center;
-  width: 800px;
-  height: 400px;
-  display: block;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999
-    }
-</style>
-<!-- показывать форму -->
 <script>
-    function toggleForm() {
+    function toggleForm() { 
         var formContainer = document.getElementById('form-container');
+        var overlay = document.getElementById('overlay');
         var formDisplay = getComputedStyle(formContainer).display;
         if (formDisplay === 'none') {
-            formContainer.style.display = 'block';
-        } else {
+            formContainer.style.display = 'flex';
+            overlay.classList.remove('display');
+    }   else {
             formContainer.style.display = 'none';
-        }
+            overlay.style.display = 'none'; 
+            console.log("nOne")
     }
+  }
 </script>
 
 <script>
@@ -139,17 +65,13 @@
         var formContainer = document.getElementById('form-container');
         var formDisplay = getComputedStyle(formContainer).display;
         if (formDisplay === 'none') {
-            formContainer.style.display = 'block';
+            formContainer.style.display = 'flex';
         } else {
             formContainer.style.display = 'none';
         }
     }
 </script>
-
-
-
-
-
+    <!--отображение продуктов -->
     <div class="product-list">
         {% for product in products %}
         <div class="product">
@@ -169,9 +91,9 @@
         <p>Покупайте наши украшения. После оформления покупки с Вами свяжется специалист.</p>
     </div>
 
-    <div class="overlay" id="overlay"><!-- поля кнопки "купить" -->
+    {% comment %} <div class="overlay" id="overlay"><!-- поля кнопки "купить" --> {% endcomment %}
         <div class="registration-container" id="registrationContainer">
-            <h2>Регистрация</h2>
+            <h2>Оформление</h2>
             <form method="post" action="{% url 'demo' %}">
                 {% csrf_token %}
 
@@ -204,12 +126,15 @@
             var overlay = document.getElementById("overlay");
             var registrationContainer = document.getElementById("registrationContainer");
             var productInput = document.getElementById("product_id");
-    
+            
+            console.log(overlay)
             overlay.style.display = "flex";
+
             registrationContainer.style.display = "block";
             productInput.value = productId;  // Set the value of the hidden input field to the product ID
         }
     </script>
+    
 
     <script>
         // Show success message if the flag is True
