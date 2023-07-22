@@ -26,6 +26,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.demo_page, name='demo'),
     path('admin/', admin.site.urls),
-    path('', views.form_submit, name='form_submit')
+    path('form_submit/', views.form_submit, name='form_submit'),
+    path('reg_submit/',views.reg_submit, name='reg_submit')
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

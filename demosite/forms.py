@@ -1,7 +1,8 @@
 from django import forms
 from .models import RegistrationForm
-from .models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .models import RegisterForm
+from django.contrib.auth.models import User
 
 
 
@@ -12,12 +13,14 @@ class RegistrationForm(forms.ModelForm):
         fields = '__all__'
         
         
-class DjangoRegistrationForm(UserCreationForm):
+class DjangoRegistrationForm(forms.ModelForm):
     class Meta:
-        
-        model = User
-        fields = ('username', 'password1', 'password2')
-        
-        
+        model = RegisterForm
+        fields = '__all__'  
+     
 class LoginForm(AuthenticationForm):
+    # class Meta:
+    #     model = User
+    #     fields = '__all__'
     pass
+    

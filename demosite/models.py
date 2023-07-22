@@ -1,5 +1,5 @@
 from django.db import models
-
+#когда купил
 class Buyer(models.Model):
     name = models.CharField(max_length=25, blank=False)
     phone = models.CharField(max_length=20)
@@ -7,7 +7,7 @@ class Buyer(models.Model):
     buyer_message = models.TextField(blank=True, max_length=255)
     selected_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True)
     
-
+#кнопка купить
 class RegistrationForm(models.Model):
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
@@ -17,10 +17,19 @@ class RegistrationForm(models.Model):
     class Meta:
         unique_together = ('email',)
         
+#Авторизация
 class User(models.Model):
     username = models.TextField(max_length=25)
-    password1 = models.CharField(max_length=25)
-    password2 = models.CharField(max_length=25)
+    password = models.CharField(max_length=25)
+    
+    
+    
+#Регистрация 
+class RegisterForm(models.Model):
+    login = models.CharField(max_length=25)
+    email = models.EmailField(max_length=25)
+    password = models.CharField(max_length=25)
+    confirmPassword = models.CharField(max_length=25)
     
 
 class Product(models.Model):

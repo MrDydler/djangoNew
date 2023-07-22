@@ -209,6 +209,13 @@
   align-items: center;
 }
 
+.registration-button {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  z-index: 9999;
+}
+
 .authorization-button {
   position: absolute;
   top: 25px;
@@ -228,6 +235,25 @@
 
 .form-field input {
   text-align: center;
+}
+
+.reg-container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(23, 11, 11);
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999
 }
 
 

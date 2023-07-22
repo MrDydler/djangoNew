@@ -7,7 +7,37 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     {% endblock %}
 </head>
+
+<button id="open-registration-button" onclick="toggleRegForm()" class="buttons-text registration-button">Регистрация</button>
+
+<div id="reg-container" class='show' style="display: none;">
+    <form method="post" action="{% url 'reg_submit' %}">
+        {% csrf_token %}
         
+        <div class="form-field">
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login">
+        </div>
+        
+        <div class="form-field">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+        </div>
+        
+        <div class="form-field">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        
+        <div class="form-field">
+            <label for="confirmPassword">Подтверждение пароля:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword">
+        </div>
+        
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</div>
+   
 
 
         <button id="open-form-button" onclick="toggleForm()" class="buttons-text authorization-button">Авторизация</button>
@@ -27,15 +57,10 @@
                 
                 <div class = "form-field">
                     <label for="password">Пароль:</label>
-                    <input type="password" id="password1" name="password1">
+                    <input type="password" id="password" name="password">
                 </div>  
-                
-                <div class = "form-field">
-                    <label for="password2">Повторите пароль:</label>
-                    <input type="password" id="password2" name="password2">
-                </div>
-                
-                <button type="submit" onclick="registrationAccepted()">РЕГИСТРАЦИЯ</button>
+                              
+                <button type="submit" onclick="registrationAccepted()">Авторизация</button>
         
                 </form>
             </div>
@@ -44,33 +69,6 @@
 
     <div class="background-image"></div>
 
-<script>
-    function toggleForm() { 
-        var formContainer = document.getElementById('form-container');
-        var overlay = document.getElementById('overlay');
-        var formDisplay = getComputedStyle(formContainer).display;
-        if (formDisplay === 'none') {
-            formContainer.style.display = 'flex';
-            overlay.classList.remove('display');
-    }   else {
-            formContainer.style.display = 'none';
-            overlay.style.display = 'none'; 
-            console.log("nOne")
-    }
-  }
-</script>
-
-<script>
-    function registrationAccepted() {
-        var formContainer = document.getElementById('form-container');
-        var formDisplay = getComputedStyle(formContainer).display;
-        if (formDisplay === 'none') {
-            formContainer.style.display = 'flex';
-        } else {
-            formContainer.style.display = 'none';
-        }
-    }
-</script>
     <!--отображение продуктов -->
     <div class="product-list">
         {% for product in products %}
@@ -118,32 +116,7 @@
     <div id="successMessage" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:60px; background-color: green">
         Ваша заявка принята
     </div>
-
-
-
-    <script>
-        function showRegistrationForm(productId) {
-            var overlay = document.getElementById("overlay");
-            var registrationContainer = document.getElementById("registrationContainer");
-            var productInput = document.getElementById("product_id");
-            
-            console.log(overlay)
-            overlay.style.display = "flex";
-
-            registrationContainer.style.display = "block";
-            productInput.value = productId;  // Set the value of the hidden input field to the product ID
-        }
-    </script>
-    
-
-    <script>
-        // Show success message if the flag is True
-        var successFlag = '{{ success }}';
-        if (successFlag === 'True') {
-            var successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'block';
-        }
-    </script>
+<script src="{% static 'script.js' %}"></script>
 
 </body>
 </html>
