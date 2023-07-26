@@ -15,18 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from demosite import views
 from demosite.views import demo_page
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from demosite.views import login_view
+from django.urls import reverse_lazy
 
 
 
 urlpatterns = [
     path('', views.demo_page, name='demo'),
     path('admin/', admin.site.urls),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('login/', views.login_view, name='login'),
     path('form_submit/', views.form_submit, name='form_submit'),
-    path('reg_submit/',views.reg_submit, name='reg_submit')
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('reg_submit/',views.reg_submit, name='reg_submit'),
+    path('user/', views.dashboard, name='user')
+
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+# from demosite.apps import DemositeConfig
+# DemositeConfig.ready()

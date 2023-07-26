@@ -9,6 +9,7 @@
 </head>
 
 <button id="open-registration-button" onclick="toggleRegForm()" class="buttons-text registration-button">Регистрация</button>
+<button id="open-form-button" onclick="window.location.href='{% url 'login' %}'" class="buttons-text authorization-button">Авторизация</button>
 
 <div id="reg-container" class='show' style="display: none;">
     <form method="post" action="{% url 'reg_submit' %}">
@@ -40,7 +41,7 @@
    
 
 
-        <button id="open-form-button" onclick="toggleForm()" class="buttons-text authorization-button">Авторизация</button>
+        
     <div class="header">
         <h1>Jevelry World</h1>
         <!-- djangoForm -->
@@ -77,6 +78,7 @@
             <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
             <div class="product-content">    
                 <p>{{ product.description }}</p>
+                <p>Цена: {{ product.price }} руб</p>
                 <button class="buy-button" onclick="showRegistrationForm('{{ product.id }}')">Купить</button>
             </div>
         </div>

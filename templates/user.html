@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    {% load static %}
+    {% block css_additional %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% endblock %}
+</head>
+<body>
+    <div class="header">
+        <h1>Добро пожаловать !</h1>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+    <div class="product-list">
+        {% for product in products %}
+        <div class="product">
+            <h3>{{ product.name }}</h3>
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            <div class="product-content">    
+                <p>{{ product.description }}</p>
+                <p>Цена: {{ product.price }} руб</p>
+                <button class="buy-button" onclick="showRegistrationForm('{{ product.id }}')">Купить</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+
+    <div class="about-us">
+        <h2>О нас</h2>
+        <p>Мы - самый лучший ювелирный магазин!</p>
+        <p>Покупайте наши украшения. После оформления покупки с Вами свяжется специалист.</p>
+    </div>
+    <!-- Your dashboard content goes here -->
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
