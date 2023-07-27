@@ -34,9 +34,8 @@ urlpatterns = [
     path('form_submit/', views.form_submit, name='form_submit'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('reg_submit/',views.reg_submit, name='reg_submit'),
-    path('user/', views.dashboard, name='user')
-
-    
+    path('user/', views.dashboard, name='user'),
+    path('add_to_cart/', views.add_to_cart, name='add_to_cart')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

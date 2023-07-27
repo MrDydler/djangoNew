@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 #когда купил
 class Buyer(models.Model):
     name = models.CharField(max_length=25, blank=False)
@@ -17,10 +18,7 @@ class RegistrationForm(models.Model):
     class Meta:
         unique_together = ('email',)
         
-#Авторизация
-class User(models.Model):
-    username = models.TextField(max_length=25)
-    password = models.CharField(max_length=25)
+
     
     
     
@@ -43,12 +41,14 @@ class Product(models.Model):
     ]
     name = models.CharField(max_length=255, blank=True)
     id = models.IntegerField(primary_key=True)
-    price = models.FloatField()
+    price = models.IntegerField()
     description = models.TextField(max_length=700)
     material = models.CharField(max_length=1, choices=MATERIAL_CHOICES, blank=True)
     image = models.ImageField(upload_to='media/products/')
 
-
+class UserCart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product, through='SelectedProduct')
 
 class Stock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -58,5 +58,17 @@ class Stock(models.Model):
         return f"{self.product.name} - {self.quantity} in stock"
 
 
-    # def __str__(self):
-    #     return self.name
+
+class SelectedProduct(models.Model):
+    user_cart = models.ForeignKey(UserCart, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user_cart', 'product',)
+
+#Авторизация
+class User(models.Model):
+    username = models.TextField(max_length=25)
+    password = models.CharField(max_length=25)

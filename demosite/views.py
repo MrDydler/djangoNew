@@ -1,10 +1,11 @@
-from .models import Product
-from django.shortcuts import render, redirect
+from .models import Product, Buyer, RegisterForm
 from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm
-from .models import Product, Buyer
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .models import RegisterForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import logging
 
 def demo_page(request):
     products = Product.objects.all()
@@ -39,7 +40,6 @@ def demo_page(request):
 
     return render(request, 'demo.html', context)
 
-
 def form_submit(request):
     print("Form submit вызвана")
     if request.method == 'POST':
@@ -54,13 +54,13 @@ def form_submit(request):
                 login(request, user)
                 return redirect('dashboard')  
             else:
+                
                 form.add_error(None, "Неправильный пароль или имя пользователя.")
 
     else:
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
-
 
 def reg_submit(request):
     success = False
@@ -85,7 +85,6 @@ def reg_submit(request):
 
     return render(request, 'demo.html', {'form': form})
 
-
 def login_view(request):
     print('login_view вызвана')
     return render(request, 'login.html')
@@ -95,3 +94,34 @@ def dashboard(request):
     products = Product.objects.all()
     print(request.user)
     return render(request, 'user.html', {'products': products})
+
+from django.contrib.auth import get_user_model
+from .models import Product, Buyer, RegisterForm, SelectedProduct, UserCart
+# ... Your existing view functions ...
+
+#@login_required
+#@csrf_exempt
+def add_to_cart(request):
+    if request.method == 'POST':
+        print("add_to_cart POST вызван.")
+        logging.debug("POST request received.")
+        product_id = request.POST.get('product_id')
+        quantity = int(request.POST.get('quantity', 1))
+
+        if product_id:
+            # Get or create the user's cart
+            user_cart, created = UserCart.objects.get_or_create(user=request.user)
+
+            # Save the selected product to the user's cart
+            selected_product, created = SelectedProduct.objects.get_or_create(
+                user_cart=user_cart,
+                product_id=product_id
+            )
+            selected_product.quantity += quantity
+            selected_product.save()
+
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid product ID.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})

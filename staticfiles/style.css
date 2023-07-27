@@ -121,54 +121,6 @@
   font-size: 20px;
 }
 
-
-/* .registration-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  border: 3px solid #ccc;
-  border-radius: 30px;
-  background-color: rgb(67, 70, 65);
-  text-align: center;
-  width: 800px;
-  height: 400px;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.registration-container label {
-  display: block;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.registration-container input,
-.registration-container textarea {
-  width: 80%;
-  padding: 5px;
-  border: 3px solid white;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.registration-container button {
-  margin-top: auto;
-  margin-bottom: 10px;
-  padding: 5px 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  left: 45%;
-} */
-
 .show {
   position: absolute;
   top: 50%;
@@ -209,6 +161,13 @@
   align-items: center;
 }
 
+.registration-button {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  z-index: 9999;
+}
+
 .authorization-button {
   position: absolute;
   top: 25px;
@@ -228,6 +187,25 @@
 
 .form-field input {
   text-align: center;
+}
+
+.reg-container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(23, 11, 11);
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999
 }
 
 
@@ -295,5 +273,31 @@
   top: 25px;
   right: 130px;
   z-index: 9999;
+}
+
+.user-cart {
+  position: absolute;
+  top: 80px; /* Adjust the top position as per your design */
+  right: 20px; /* Adjust the right position as per your design */
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 200px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-cart h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.user-cart p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
 }
   
