@@ -1,7 +1,7 @@
 function saveCart() {
     // Get all cart items from the user-cart container
     const cartItems = document.querySelectorAll('.user-cart [data-product-id]');
-
+    console.log('cartItems ', cartItems)
     // Check if the cart is empty
     if (cartItems.length === 0) {
         alert('Your cart is empty. Add products before saving the cart.');
@@ -16,8 +16,9 @@ function saveCart() {
         const productId = item.dataset.productId;
         const productQuantityElement = item.querySelector('.product-quantity-input');
         const productQuantity = productQuantityElement ? parseInt(productQuantityElement.value) : 0;
-
+        console.log('productQuantity ', productQuantity);
         cartData[productId] = productQuantity;
+        console.log('cartData[productId] ', cartData[productId]);
     });
 
     // Get the CSRF token from cookies
