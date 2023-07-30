@@ -31,6 +31,7 @@ function buyProduct(productId, productName, event, saveCart = false) {
         quantityInput.type = 'number';
         quantityInput.value = '1';
         quantityInput.min = '1';
+        quantityInput.classList.add('product-quantity-input');
         productDiv.appendChild(quantityInput);
 
         // Create a delete button for the product

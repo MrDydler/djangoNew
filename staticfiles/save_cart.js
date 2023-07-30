@@ -1,7 +1,7 @@
 function saveCart() {
     // Get all cart items from the user-cart container
     const cartItems = document.querySelectorAll('.user-cart [data-product-id]');
-
+    console.log('cartItems ', cartItems)
     // Check if the cart is empty
     if (cartItems.length === 0) {
         alert('Your cart is empty. Add products before saving the cart.');
@@ -11,13 +11,13 @@ function saveCart() {
     // Create an object to store cart data (product ID as key, quantity as value)
     const cartData = {};
     let cartName = `Корзина ${document.querySelectorAll('.saved-cart-item').length + 1}`;
-
     cartItems.forEach(function (item) {
         const productId = item.dataset.productId;
         const productQuantityElement = item.querySelector('.product-quantity-input');
         const productQuantity = productQuantityElement ? parseInt(productQuantityElement.value) : 0;
-
+        console.log('productQuantity ', productQuantity);
         cartData[productId] = productQuantity;
+        console.log('cartData[productId] ', cartData[productId]);
     });
 
     // Get the CSRF token from cookies
@@ -52,7 +52,10 @@ function saveCart() {
         });
 }
 
-
+function showCart(cartId) {
+    const cartProducts = document.getElementById(`cart-products-${cartId}`);
+    cartProducts.style.display = 'block';
+}
 
 // Function to get the CSRF token from cookies
 function getCookie(name) {

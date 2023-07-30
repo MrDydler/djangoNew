@@ -11,7 +11,6 @@ function saveCart() {
     // Create an object to store cart data (product ID as key, quantity as value)
     const cartData = {};
     let cartName = `Корзина ${document.querySelectorAll('.saved-cart-item').length + 1}`;
-
     cartItems.forEach(function (item) {
         const productId = item.dataset.productId;
         const productQuantityElement = item.querySelector('.product-quantity-input');
@@ -53,7 +52,10 @@ function saveCart() {
         });
 }
 
-
+function showCart(cartId) {
+    const cartProducts = document.getElementById(`cart-products-${cartId}`);
+    cartProducts.style.display = 'block';
+}
 
 // Function to get the CSRF token from cookies
 function getCookie(name) {

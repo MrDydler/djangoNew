@@ -36,7 +36,7 @@
         <h3>Корзина пользователя</h3>
         {% for item in request.user.selectedproduct_set.all %}
         <div data-product-id="{{ item.product.id }}" class="cart-item">
-            <p>{{ item.product.name }} - <span class="product-quantity">{{ item.quantity }}</span></p>
+            <p>{{ item.product.name }} - <span class="product-quantity">{{ item.quantity }} шт</span></p>
             <!-- Add a delete button for each product -->
             <button class="delete-button" onclick="deleteProduct('{{ item.product.name }}', event)">Удалить</button>
             <!-- Add a quantity input field -->
@@ -46,21 +46,31 @@
         <button class="buy-in-cart-button" onclick="saveCart()">Сохранить корзину</button>
     </div> 
 
-    <div class="saved-cart">
-        <h3>Сохраненные корзины</h3>
-        <div class="saved-cart-items">
-            {% for buyer in saved_carts %}
-            <div class="saved-cart-item">
-                <h4>{{ user.username }}</h4>
+
+
+<div class="saved-cart">
+    <h3>Сохраненные корзины</h3>
+    <div class="saved-cart-items">
+        {% for user_cart in saved_carts %}
+        <div class="saved-cart-item">
+            <h4>{{ user_cart.name }}</h4>
+            <button class="show-cart-button" onclick="showCart('{{ user_cart.id }}')">Показать</button>
+            <div class="cart-products" id="cart-products-{{ user_cart.id }}" style="display: none;">
                 <ul>
-                    {% for selected_product in buyer.selectedproduct_set.all %}
-                    <li>{{ selected_product.product.name }} - {{ selected_product.quantity }}</li>
+                    <button class="delete-cart-button" onclick="deleteCart('{{ user_cart.id }}')">Удалить корзину</button>
+                    {% for selected_product in user_cart.selectedproduct_set.all %}
+                    <li>{{ selected_product.product.name }} - {{ selected_product.quantity }} шт</li>
+                    
                     {% endfor %}
                 </ul>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+</div>
+
+
+
 
     <div class="about-us">
         <h2>О нас</h2>
@@ -68,6 +78,7 @@
         <p>Покупайте наши украшения. После оформления покупки с Вами свяжется специалист.</p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'delete_cart.js' %}"></script>
     <script src="{% static 'buy_product.js' %}"></script>
     <script src="{% static 'save_cart.js' %}"></script>
     <script src="{% static 'script.js' %}"></script>

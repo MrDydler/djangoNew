@@ -1,6 +1,6 @@
 from .models import Product, Buyer, RegisterForm, UserCart, SelectedProduct
 from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -133,13 +133,17 @@ def add_to_cart(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=400)
 
+@login_required
+@csrf_exempt
 def save_cart(request):
     if request.method == 'POST':
         data = json.loads(request.body)  # Get the JSON data sent from the client-side
 
         # Get or create the user's cart
         user_cart, created = UserCart.objects.get_or_create(user=request.user)
-
+        user_cart.name = f"Корзина {UserCart.objects.filter(user=request.user).count()}"
+        print("user_cart.name ", user_cart.name)
+        user_cart.save()
         # Assuming the data is an object with product IDs as keys and quantities as values
         for product_id, product_quantity in data.items():
             try:
@@ -159,4 +163,18 @@ def save_cart(request):
                 pass
 
         return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+@login_required
+@csrf_exempt
+def delete_cart(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)  # Get the JSON data sent from the client-side
+        cart_id = data.get('cart_id')
+
+        if cart_id:
+            user_cart = get_object_or_404(UserCart, id=cart_id, user=request.user)
+            user_cart.delete()
+            return JsonResponse({'success': True})
+
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
