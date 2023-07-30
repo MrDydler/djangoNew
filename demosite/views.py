@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F, Sum
 from django.http import JsonResponse
 import logging
 import json
@@ -142,8 +143,12 @@ def save_cart(request):
         # Get or create the user's cart
         user_cart, created = UserCart.objects.get_or_create(user=request.user)
         user_cart.name = f"Корзина {UserCart.objects.filter(user=request.user).count()}"
-        print("user_cart.name ", user_cart.name)
         user_cart.save()
+
+        # Reset the products in the cart and update the selected products
+        user_cart.products.clear()
+        total_amount = 0
+
         # Assuming the data is an object with product IDs as keys and quantities as values
         for product_id, product_quantity in data.items():
             try:
@@ -158,9 +163,16 @@ def save_cart(request):
                 selected_product.quantity = product_quantity
                 selected_product.save()
 
+                # Calculate the total amount of the cart
+                total_amount += product.price * product_quantity
+
             except Product.DoesNotExist:
                 # Handle the case where the product with the specified ID does not exist
                 pass
+
+        # Update the cart's total amount
+        user_cart.total_amount = total_amount
+        user_cart.save()
 
         return JsonResponse({'success': True})
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
@@ -174,6 +186,9 @@ def delete_cart(request):
 
         if cart_id:
             user_cart = get_object_or_404(UserCart, id=cart_id, user=request.user)
+            # Delete the associated SelectedProduct objects
+            user_cart.selectedproduct_set.all().delete()
+            # Delete the UserCart object
             user_cart.delete()
             return JsonResponse({'success': True})
 

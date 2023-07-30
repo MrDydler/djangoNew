@@ -52,6 +52,7 @@ class UserCart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='SelectedProduct')
     name = models.CharField(max_length=100, default='Корзина')
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     
 class Stock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
