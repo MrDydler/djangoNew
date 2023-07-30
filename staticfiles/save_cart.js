@@ -1,45 +1,69 @@
-// save_cart.js
-document.addEventListener('DOMContentLoaded', function() {
-    const saveButton = document.querySelector('.save-button');
+function saveCart() {
+    // Get all cart items from the user-cart container
+    const cartItems = document.querySelectorAll('.user-cart [data-product-id]');
 
-    saveButton.addEventListener('click', function() {
-        // Get all cart items
-        const cartItems = document.querySelectorAll('.cart-item');
+    // Check if the cart is empty
+    if (cartItems.length === 0) {
+        alert('Your cart is empty. Add products before saving the cart.');
+        return;
+    }
 
-        // Create an array to store cart data
-        const cartData = [];
+    // Create an object to store cart data (product ID as key, quantity as value)
+    const cartData = {};
 
-        cartItems.forEach(function(item) {
-            const productId = item.dataset.productId;
-            const productName = item.querySelector('p').textContent;
-            const productQuantity = parseInt(item.querySelector('.product-quantity').textContent);
+    cartItems.forEach(function (item) {
+        const productId = item.dataset.productId;
+        const productQuantityElement = item.querySelector('.product-quantity');
+        const productQuantity = productQuantityElement ? parseInt(productQuantityElement.textContent) : 0;
 
-            cartData.push({
-                productId: productId,
-                productName: productName,
-                productQuantity: productQuantity
-            });
-        });
-
-        // Send the cart data to the server for saving
-        fetch('/save_cart/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data: cartData })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Cart data saved successfully!');
-            } else {
-                alert('Error saving cart data.');
-            }
-        })
-        .catch(error => {
-            alert('An error occurred while saving cart data.');
-            console.error(error);
-        });
+        cartData[productId] = productQuantity;
     });
-});
+
+    // Get the CSRF token from cookies
+    const csrfToken = getCookie('csrftoken');
+
+    // Send the cart data to the server for saving
+    
+    axios.post('/save_cart/', cartData, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+    })
+    .then((response) => {
+        if (!response.status === 200) {
+            throw new Error('Network response was not ok');
+        }
+        return response.data; // Read the response data
+    })
+    .then((data) => {
+        // Handle the response from the server
+        if (data.success) {
+            alert('Cart data saved successfully!');
+            // ... (rest of the code remains the same)
+        } else {
+            alert('Error saving cart data.');
+        }
+    })
+    .catch((error) => {
+        alert('An error occurred while saving cart data.');
+        console.error(error);
+    });
+}
+
+// Function to get the CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if the cookie name matches the CSRF token name used by Django (default is 'csrftoken')
+            if (cookie.substring(0, name.length + 1) === name + '=') {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

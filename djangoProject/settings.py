@@ -88,6 +88,21 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.views.save_cart': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # You can adjust the logging level here (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        },
+    },
+}
 
 
 

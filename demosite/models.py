@@ -7,7 +7,9 @@ class Buyer(models.Model):
     email = models.CharField(max_length=25, blank=False)
     buyer_message = models.TextField(blank=True, max_length=255)
     selected_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True)
-    
+    quantity = models.IntegerField(default=0)
+    def __str__(self):
+        return f"{self.name} - {self.selected_product.name} ({self.quantity})"
 #кнопка купить
 class RegistrationForm(models.Model):
     name = models.CharField(max_length=255)

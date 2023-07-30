@@ -1,4 +1,4 @@
-from .models import Product, Buyer, RegisterForm
+from .models import Product, Buyer, RegisterForm, UserCart, SelectedProduct
 from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import logging
+import json
 
 def demo_page(request):
     products = Product.objects.all()
@@ -92,8 +93,9 @@ def login_view(request):
 @login_required
 def dashboard(request):
     products = Product.objects.all()
-    print(request.user)
-    return render(request, 'user.html', {'products': products})
+    saved_carts = UserCart.objects.filter(user=request.user)
+    print('saved cars ', saved_carts)
+    return render(request, 'user.html', {'products': products, 'saved_carts': saved_carts})
 
 from django.contrib.auth import get_user_model
 from .models import Product, Buyer, RegisterForm, SelectedProduct, UserCart
@@ -125,3 +127,35 @@ def add_to_cart(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid product ID.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+
+# views.py
+
+
+def save_cart(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)  # Get the JSON data sent from the client-side
+
+        # Get or create the user's cart
+        user_cart, created = UserCart.objects.get_or_create(user=request.user)
+
+        # Assuming the data is an object with product IDs as keys and quantities as values
+        for product_id, product_quantity in data.items():
+            try:
+                # Find the product based on the product_id
+                product = Product.objects.get(pk=product_id)
+
+                # Create a SelectedProduct instance and associate it with the user's cart
+                selected_product, created = SelectedProduct.objects.get_or_create(
+                    user_cart=user_cart,
+                    product=product
+                )
+                selected_product.quantity = product_quantity
+                selected_product.save()
+
+            except Product.DoesNotExist:
+                # Handle the case where the product with the specified ID does not exist
+                pass
+
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)

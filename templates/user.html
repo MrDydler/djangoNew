@@ -7,7 +7,6 @@
     {% block css_additional %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     {% endblock %}
-
 </head>
 <body>
     <div class="header">
@@ -41,16 +40,33 @@
             <button class="delete-button" onclick="deleteProduct('{{ item.product.name }}', event)">Удалить</button>
         </div>
         {% endfor %}
+        <button class="buy-in-cart-button" onclick="saveCart()">Сохранить корзину</button>
     </div> 
+
+    <div class="saved-cart">
+        <h3>Сохраненные корзины</h3>
+        <div class="saved-cart-items">
+            {% for buyer in saved_carts %}
+            <div class="saved-cart-item">
+                <h4>{{ buyer.name }}</h4>
+                <ul>
+                    {% for selected_product in buyer.selectedproduct_set.all %}
+                    <li>{{ selected_product.product.name }} - {{ selected_product.quantity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
     <div class="about-us">
         <h2>О нас</h2>
         <p>Мы - самый лучший ювелирный магазин!</p>
         <p>Покупайте наши украшения. После оформления покупки с Вами свяжется специалист.</p>
     </div>
-    <!-- Your dashboard content goes here -->
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{% static 'buy_product.js' %}"></script>
+    <script src="{% static 'save_cart.js' %}"></script>
     <script src="{% static 'script.js' %}"></script>
 </body>
 </html>

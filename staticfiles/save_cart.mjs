@@ -1,3 +1,5 @@
+import ky from 'djangoProject/static/ky.mjs';
+
 function saveCart() {
     // Get all cart items from the user-cart container
     const cartItems = document.querySelectorAll('.user-cart [data-product-id]');
@@ -23,18 +25,18 @@ function saveCart() {
     const csrfToken = getCookie('csrftoken');
 
     // Send the cart data to the server for saving
-    
-    axios.post('/save_cart/', cartData, {
+    ky.post('/save_cart/', {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/javascript',
             'X-CSRFToken': csrfToken,
         },
+        json: cartData, // Automatically stringify the cartData object as JSON
     })
     .then((response) => {
-        if (!response.status === 200) {
+        if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.data; // Read the response data
+        return response.json(); // Read the response body as JSON
     })
     .then((data) => {
         // Handle the response from the server

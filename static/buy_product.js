@@ -38,3 +38,8 @@ function buyProduct(productId, productName, event) {
         alert('Product added to the cart.');
     }
 }
+
+function buyInCart() {
+    // Trigger the "Buy in cart" functionality by clicking the "Buy in cart" button
+    document.querySelector('.buy-in-cart-button').click();
+}
