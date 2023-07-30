@@ -407,10 +407,12 @@
   position: fixed;
   top: 355px;
   right: 10px;
-  background-color: #f9f9f9;
+  background-color: #655a5a;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: inherit;
   border: 3px;
+  border-radius:3px;
+  -webkit-text-fill-color: #ccc;
 }
 
 .saved-cart h3 {
@@ -421,10 +423,11 @@
 
 .saved-cart-items {
   position: fixed;
-  top: 360px;
-  right: 0;
-  background-color: #f9f9f9;
+  top: 410px;
+  right: 15px;
+  background-color: #4a4848;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 3px;
   border-radius: 5px;
+  -webkit-text-fill-color: #ccc;
 }

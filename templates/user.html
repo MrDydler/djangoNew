@@ -1,3 +1,4 @@
+
 <!-- user.html -->
 <!DOCTYPE html>
 <html>
@@ -38,6 +39,8 @@
             <p>{{ item.product.name }} - <span class="product-quantity">{{ item.quantity }}</span></p>
             <!-- Add a delete button for each product -->
             <button class="delete-button" onclick="deleteProduct('{{ item.product.name }}', event)">Удалить</button>
+            <!-- Add a quantity input field -->
+            <input type="number" min="1" value="{{ item.quantity }}" class="product-quantity-input" data-product-id="{{ item.product.id }}">
         </div>
         {% endfor %}
         <button class="buy-in-cart-button" onclick="saveCart()">Сохранить корзину</button>
@@ -48,7 +51,7 @@
         <div class="saved-cart-items">
             {% for buyer in saved_carts %}
             <div class="saved-cart-item">
-                <h4>{{ buyer.name }}</h4>
+                <h4>{{ user.username }}</h4>
                 <ul>
                     {% for selected_product in buyer.selectedproduct_set.all %}
                     <li>{{ selected_product.product.name }} - {{ selected_product.quantity }}</li>

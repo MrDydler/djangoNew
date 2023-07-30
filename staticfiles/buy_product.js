@@ -1,5 +1,5 @@
-// buy_product.js
-function buyProduct(productId, productName, event) {
+buy_product.js
+function buyProduct(productId, productName, event, saveCart = false) {
     event.preventDefault();
     console.log('buyProduct function called.');
 
@@ -12,9 +12,12 @@ function buyProduct(productId, productName, event) {
     if (existingProduct) {
         // If the product already exists, update its quantity
         const productQuantityElement = existingProduct.querySelector('.product-quantity');
-        if (productQuantityElement) {
-            const currentQuantity = parseInt(productQuantityElement.textContent);
-            productQuantityElement.textContent = currentQuantity + 1;
+        const currentQuantity = parseInt(productQuantityElement.textContent);
+        const quantityInput = prompt(`Enter the quantity of ${productName} you want to add:`, currentQuantity);
+
+        if (quantityInput !== null) {
+            const newQuantity = parseInt(quantityInput);
+            productQuantityElement.textContent = newQuantity;
             alert('Product quantity updated in the cart.');
         }
     } else {
@@ -23,10 +26,17 @@ function buyProduct(productId, productName, event) {
         productDiv.dataset.productId = productId;
         productDiv.textContent = productName;
 
+        // Create a quantity input field
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.value = '1';
+        quantityInput.min = '1';
+        productDiv.appendChild(quantityInput);
+
         // Create a delete button for the product
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Удалить';
-        deleteButton.onclick = function() {
+        deleteButton.onclick = function () {
             shoppingCart.removeChild(productDiv);
             alert('Product removed from the cart.');
         };
@@ -36,8 +46,14 @@ function buyProduct(productId, productName, event) {
         shoppingCart.appendChild(productDiv);
 
         alert('Product added to the cart.');
+
+        // If saveCart is true, call the saveCart function to save the cart
+        if (saveCart) {
+            saveCart();
+        }
     }
 }
+
 
 function buyInCart() {
     // Trigger the "Buy in cart" functionality by clicking the "Buy in cart" button

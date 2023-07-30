@@ -10,11 +10,12 @@ function saveCart() {
 
     // Create an object to store cart data (product ID as key, quantity as value)
     const cartData = {};
+    let cartName = `Корзина ${document.querySelectorAll('.saved-cart-item').length + 1}`;
 
     cartItems.forEach(function (item) {
         const productId = item.dataset.productId;
-        const productQuantityElement = item.querySelector('.product-quantity');
-        const productQuantity = productQuantityElement ? parseInt(productQuantityElement.textContent) : 0;
+        const productQuantityElement = item.querySelector('.product-quantity-input');
+        const productQuantity = productQuantityElement ? parseInt(productQuantityElement.value) : 0;
 
         cartData[productId] = productQuantity;
     });
@@ -23,33 +24,35 @@ function saveCart() {
     const csrfToken = getCookie('csrftoken');
 
     // Send the cart data to the server for saving
-    
-    axios.post('/save_cart/', cartData, {
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-        },
-    })
-    .then((response) => {
-        if (!response.status === 200) {
-            throw new Error('Network response was not ok');
-        }
-        return response.data; // Read the response data
-    })
-    .then((data) => {
-        // Handle the response from the server
-        if (data.success) {
-            alert('Cart data saved successfully!');
-            // ... (rest of the code remains the same)
-        } else {
-            alert('Error saving cart data.');
-        }
-    })
-    .catch((error) => {
-        alert('An error occurred while saving cart data.');
-        console.error(error);
-    });
+    axios
+        .post('/save_cart/', JSON.stringify(cartData), {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+        })
+        .then((response) => {
+            if (!response.status === 200) {
+                throw new Error('Network response was not ok');
+            }
+            return response.data; // Read the response data
+        })
+        .then((data) => {
+            // Handle the response from the server
+            if (data.success) {
+                alert('Cart data saved successfully!');
+                // ... (rest of the code remains the same)
+            } else {
+                alert('Error saving cart data.');
+            }
+        })
+        .catch((error) => {
+            alert('An error occurred while saving cart data.');
+            console.error(error);
+        });
 }
+
+
 
 // Function to get the CSRF token from cookies
 function getCookie(name) {

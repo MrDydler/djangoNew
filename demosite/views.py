@@ -109,6 +109,7 @@ def add_to_cart(request):
         logging.debug("POST request received.")
         product_id = request.POST.get('product_id')
         quantity = int(request.POST.get('quantity', 1))
+        cart_name = request.POST.get('cart_name', 'default')
 
         if product_id:
             # Get or create the user's cart
@@ -122,15 +123,15 @@ def add_to_cart(request):
             selected_product.quantity += quantity
             selected_product.save()
 
+            # Update the cart name
+            user_cart.name = cart_name
+            user_cart.save()
+
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Invalid product ID.'})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
-
-
-# views.py
-
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=400)
 
 def save_cart(request):
     if request.method == 'POST':
