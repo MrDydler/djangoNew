@@ -3,6 +3,7 @@ from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.db import IntegrityError
@@ -73,25 +74,35 @@ def form_submit(request):
 def reg_submit(request):
     success = False
     if request.method == 'POST':
-        print('Функция reg_submit: Обработка формы RegisterForm')
         form = DjangoRegistrationForm(request.POST)
         if form.is_valid():
-            registration = RegisterForm (
-               login=form.cleaned_data['login'], 
-               email=form.cleaned_data['email'],
-               password=form.cleaned_data['password'],
-               confirmPassword=form.cleaned_data['confirmPassword'],
-            )
-            registration.save()
-            print('RegisterForm сохранена')
-            
-            success = True
-            return redirect('/') 
+            # Check if a user with the same username or email already exists
+            username = form.cleaned_data['login']
+            email = form.cleaned_data['email']
+            if User.objects.filter(username=username).exists():
+                form.add_error('login', 'Пользователь с таким логином уже существует.')
+                print('логин уже существует')
+            elif User.objects.filter(email=email).exists():
+                form.add_error('email', 'Пользователь с таким email уже существует.')
+                print('email уже существует')
+            else:
+                # If the username and email are unique, proceed with registration
+                registration = RegisterForm(
+                    login=form.cleaned_data['login'],
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password'],
+                    confirmPassword=form.cleaned_data['confirmPassword'],
+                )
+                registration.save()
+                print('RegisterForm сохранена')
+
+                success = True
+                return redirect('/')
     else:
         form = DjangoRegistrationForm()
         print('Функция reg_submit: Форма RegisterForm - else')
 
-    return render(request, 'demo.html', {'form': form})
+    return render(request, 'demo.html', {'form': form, 'success': success})
 
 # Вью для страницы авторизации
 def login_view(request):

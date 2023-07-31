@@ -7,6 +7,6 @@ from .models import RegisterForm
 def create_user_from_register_form(sender, instance, created, **kwargs):
     if created:
         # Create a new User instance with the data from the RegisterForm instance
-        user = User.objects.create_user(username=instance.login, password=instance.password)
-        user.is_staff = True
+        user = User.objects.create_user(username=instance.login, password=instance.password, email=instance.email)
+        user.is_staff = False
         user.save()
