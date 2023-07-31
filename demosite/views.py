@@ -4,12 +4,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+from django.db import IntegrityError
 from django.db.models import F, Sum
 from django.http import JsonResponse
 import logging
 import json
 
+# Вью для демонстрационной страницы
 def demo_page(request):
+    # Получаем все продукты
     products = Product.objects.all()
     success = False
 
@@ -19,6 +23,7 @@ def demo_page(request):
             product_id = request.POST.get('product_id')
             product = Product.objects.get(pk=product_id)
 
+            # Создаем новую запись о покупателе
             buyer = Buyer(
                 name=form.cleaned_data['name'],
                 phone=form.cleaned_data['phone'],
@@ -42,8 +47,9 @@ def demo_page(request):
 
     return render(request, 'demo.html', context)
 
+# Вью для отправки формы авторизации
 def form_submit(request):
-    print("Form submit вызвана")
+    print("Функция form_submit вызвана")
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -56,7 +62,6 @@ def form_submit(request):
                 login(request, user)
                 return redirect('dashboard')  
             else:
-                
                 form.add_error(None, "Неправильный пароль или имя пользователя.")
 
     else:
@@ -64,10 +69,11 @@ def form_submit(request):
 
     return render(request, 'login.html', {'form': form})
 
+# Вью для отправки формы регистрации
 def reg_submit(request):
     success = False
     if request.method == 'POST':
-        print('RegisterForm ')
+        print('Функция reg_submit: Обработка формы RegisterForm')
         form = DjangoRegistrationForm(request.POST)
         if form.is_valid():
             registration = RegisterForm (
@@ -83,40 +89,40 @@ def reg_submit(request):
             return redirect('/') 
     else:
         form = DjangoRegistrationForm()
-        print('RegisterForm else')
+        print('Функция reg_submit: Форма RegisterForm - else')
 
     return render(request, 'demo.html', {'form': form})
 
+# Вью для страницы авторизации
 def login_view(request):
-    print('login_view вызвана')
+    print('Функция login_view вызвана')
     return render(request, 'login.html')
 
+# Защита от неавторизованных пользователей, вью для dashboard
 @login_required
 def dashboard(request):
     products = Product.objects.all()
     saved_carts = UserCart.objects.filter(user=request.user)
-    print('saved cars ', saved_carts)
+    print('Сохраненные корзины: ', saved_carts)
     return render(request, 'user.html', {'products': products, 'saved_carts': saved_carts})
 
+# Функция для добавления товара в корзину
 from django.contrib.auth import get_user_model
 from .models import Product, Buyer, RegisterForm, SelectedProduct, UserCart
-# ... Your existing view functions ...
 
-#@login_required
-#@csrf_exempt
 def add_to_cart(request):
     if request.method == 'POST':
-        print("add_to_cart POST вызван.")
-        logging.debug("POST request received.")
+        print("Функция add_to_cart вызвана.")
+        logging.debug("Получен POST запрос.")
         product_id = request.POST.get('product_id')
         quantity = int(request.POST.get('quantity', 1))
         cart_name = request.POST.get('cart_name', 'default')
 
         if product_id:
-            # Get or create the user's cart
+            # Получаем или создаем корзину пользователя
             user_cart, created = UserCart.objects.get_or_create(user=request.user)
 
-            # Save the selected product to the user's cart
+            # Сохраняем выбранный товар в корзине пользователя
             selected_product, created = SelectedProduct.objects.get_or_create(
                 user_cart=user_cart,
                 product_id=product_id
@@ -124,38 +130,39 @@ def add_to_cart(request):
             selected_product.quantity += quantity
             selected_product.save()
 
-            # Update the cart name
+            # Обновляем название корзины
             user_cart.name = cart_name
             user_cart.save()
 
             return JsonResponse({'status': 'success'})
         else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid product ID.'})
+            return JsonResponse({'status': 'error', 'message': 'Неверный идентификатор товара.'})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Неверный метод запроса.'}, status=400)
 
+# Функция сохранения корзины
 @login_required
 @csrf_exempt
 def save_cart(request):
     if request.method == 'POST':
-        data = json.loads(request.body)  # Get the JSON data sent from the client-side
+        data = json.loads(request.body)  # Получаем данные JSON, отправленные со стороны клиента
 
-        # Get or create the user's cart
+        # Получаем или создаем корзину пользователя
         user_cart, created = UserCart.objects.get_or_create(user=request.user)
         user_cart.name = f"Корзина {UserCart.objects.filter(user=request.user).count()}"
         user_cart.save()
 
-        # Reset the products in the cart and update the selected products
+        # Сбрасываем продукты в корзине и обновляем выбранные продукты
         user_cart.products.clear()
         total_amount = 0
 
-        # Assuming the data is an object with product IDs as keys and quantities as values
+        # Предполагаем, что данные - это объект с идентификаторами продуктов в качестве ключей и количеством в качестве значений
         for product_id, product_quantity in data.items():
             try:
-                # Find the product based on the product_id
+                # Находим продукт на основе его идентификатора
                 product = Product.objects.get(pk=product_id)
 
-                # Create a SelectedProduct instance and associate it with the user's cart
+                # Создаем экземпляр SelectedProduct и связываем его с корзиной пользователя
                 selected_product, created = SelectedProduct.objects.get_or_create(
                     user_cart=user_cart,
                     product=product
@@ -163,33 +170,34 @@ def save_cart(request):
                 selected_product.quantity = product_quantity
                 selected_product.save()
 
-                # Calculate the total amount of the cart
+                # Рассчитываем общую стоимость корзины
                 total_amount += product.price * product_quantity
 
             except Product.DoesNotExist:
-                # Handle the case where the product with the specified ID does not exist
+                # Обрабатываем случай, когда продукт с указанным идентификатором не существует
                 pass
 
-        # Update the cart's total amount
+        # Обновляем общую стоимость корзины
         user_cart.total_amount = total_amount
         user_cart.save()
 
         return JsonResponse({'success': True})
-    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+    return JsonResponse({'error': 'Неверный метод запроса.'}, status=400)
 
+# Функция удаления корзины
 @login_required
 @csrf_exempt
 def delete_cart(request):
     if request.method == 'POST':
-        data = json.loads(request.body)  # Get the JSON data sent from the client-side
+        data = json.loads(request.body)  # Получаем данные JSON, отправленные со стороны клиента
         cart_id = data.get('cart_id')
 
         if cart_id:
             user_cart = get_object_or_404(UserCart, id=cart_id, user=request.user)
-            # Delete the associated SelectedProduct objects
+            # Удаляем связанные объекты SelectedProduct
             user_cart.selectedproduct_set.all().delete()
-            # Delete the UserCart object
+            # Удаляем объект UserCart
             user_cart.delete()
             return JsonResponse({'success': True})
 
-    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+    return JsonResponse({'error': 'Неверный метод запроса.'}, status=400)

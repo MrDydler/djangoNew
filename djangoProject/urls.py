@@ -31,10 +31,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
+    #loginForm
     path('form_submit/', views.form_submit, name='form_submit'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('reg_submit/',views.reg_submit, name='reg_submit'),
     path('user/', views.dashboard, name='user'),
+    #корзина
     path('add_to_cart/', views.add_to_cart, name='add_to_cart'),
     path('save_cart/', views.save_cart, name='save_cart'),
     path('delete_cart/', views.delete_cart, name='delete_cart'),

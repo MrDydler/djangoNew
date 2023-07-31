@@ -31,7 +31,7 @@ class RegisterForm(models.Model):
     password = models.CharField(max_length=25)
     confirmPassword = models.CharField(max_length=25)
     
-
+# product
 class Product(models.Model):
     MATERIAL_CHOICES = [
         ("1", "золотой"),
@@ -48,12 +48,14 @@ class Product(models.Model):
     material = models.CharField(max_length=1, choices=MATERIAL_CHOICES, blank=True)
     image = models.ImageField(upload_to='media/products/')
 
+#корзина
 class UserCart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='SelectedProduct')
     name = models.CharField(max_length=100, default='Корзина')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     
+#остаток товара
 class Stock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
@@ -62,7 +64,7 @@ class Stock(models.Model):
         return f"{self.product.name} - {self.quantity} in stock"
 
 
-
+#соранение корзины
 class SelectedProduct(models.Model):
     user_cart = models.ForeignKey(UserCart, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

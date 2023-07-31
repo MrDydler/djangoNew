@@ -31,10 +31,10 @@ function showRegistrationForm(productId) {
     overlay.style.display = "flex";
 
     registrationContainer.style.display = "block";
-    productInput.value = productId;  // Set the value of the hidden input field to the product ID
+    productInput.value = productId;  // скрытое поле product id для передачи айдишника продукта
 }
 
-// Show success message if the flag is True
+// показ succes флага
 var successFlag = '{{ success }}';
 if (successFlag === 'True') {
     var successMessage = document.getElementById('successMessage');

@@ -1,29 +1,26 @@
 function saveCart() {
-    // Get all cart items from the user-cart container
+    // Получаем все элементы корзины из контейнера user-cart
     const cartItems = document.querySelectorAll('.user-cart [data-product-id]');
-    console.log('cartItems ', cartItems)
-    // Check if the cart is empty
+
+    // Проверяем, пуста ли корзина
     if (cartItems.length === 0) {
-        alert('Your cart is empty. Add products before saving the cart.');
+        alert('Ваша корзина пуста. Добавьте товары перед сохранением корзины.');
         return;
     }
 
-    // Create an object to store cart data (product ID as key, quantity as value)
+    // Создаем объект для хранения данных корзины (идентификатор продукта в качестве ключа, количество в качестве значения)
     const cartData = {};
-    let cartName = `Корзина ${document.querySelectorAll('.saved-cart-item').length + 1}`;
     cartItems.forEach(function (item) {
         const productId = item.dataset.productId;
         const productQuantityElement = item.querySelector('.product-quantity-input');
         const productQuantity = productQuantityElement ? parseInt(productQuantityElement.value) : 0;
-        console.log('productQuantity ', productQuantity);
         cartData[productId] = productQuantity;
-        console.log('cartData[productId] ', cartData[productId]);
     });
 
-    // Get the CSRF token from cookies
+    // Получаем CSRF-токен из куков
     const csrfToken = getCookie('csrftoken');
 
-    // Send the cart data to the server for saving
+    // Отправляем данные корзины на сервер для сохранения
     axios
         .post('/save_cart/', JSON.stringify(cartData), {
             headers: {
@@ -33,21 +30,22 @@ function saveCart() {
         })
         .then((response) => {
             if (!response.status === 200) {
-                throw new Error('Network response was not ok');
+                throw new Error('Ошибка сетевого запроса');
             }
-            return response.data; // Read the response data
+            return response.data; // Читаем данные ответа
         })
         .then((data) => {
-            // Handle the response from the server
+            // Обрабатываем ответ от сервера
             if (data.success) {
-                alert('Cart data saved successfully!');
-                // ... (rest of the code remains the same)
+                alert('Данные корзины успешно сохранены!');
+                // Перезагружаем страницу, чтобы обновить список корзин
+                window.location.reload();
             } else {
-                alert('Error saving cart data.');
+                alert('Ошибка сохранения данных корзины.');
             }
         })
         .catch((error) => {
-            alert('An error occurred while saving cart data.');
+            alert('Произошла ошибка при сохранении данных корзины.');
             console.error(error);
         });
 }
@@ -57,14 +55,14 @@ function showCart(cartId) {
     cartProducts.style.display = 'block';
 }
 
-// Function to get the CSRF token from cookies
+// Функция для получения CSRF-токена из куков
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Check if the cookie name matches the CSRF token name used by Django (default is 'csrftoken')
+            // Проверяем, соответствует ли имя куки имени CSRF-токена, используемого Django (по умолчанию - 'csrftoken')
             if (cookie.substring(0, name.length + 1) === name + '=') {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;

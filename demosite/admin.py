@@ -5,7 +5,7 @@ from demosite.models import Product
 from demosite.models import RegisterForm, UserCart, SelectedProduct
 from .models import User
 
-# Register your models here.
+# Отображение на /admin.
 admin.site.register(Buyer)
 admin.site.register(Stock)
 admin.site.register(Product)

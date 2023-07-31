@@ -24,7 +24,7 @@
                 <div class="product-content">    
                     <p>{{ product.description }}</p>
                     <p>Цена: {{ product.price }} руб</p>
-                    <!-- Pass the product name to the buyProduct function -->
+                    
                     <button class="buy-button" onclick="buyProduct('{{ product.id }}', '{{ product.name }}', event)">Купить</button>
                 </div>
             </div>
@@ -37,9 +37,9 @@
         {% for item in request.user.selectedproduct_set.all %}
         <div data-product-id="{{ item.product.id }}" class="cart-item">
             <p>{{ item.product.name }} - <span class="product-quantity">{{ item.quantity }} шт</span></p>
-            <!-- Add a delete button for each product -->
+            
             <button class="delete-button" onclick="deleteProduct('{{ item.product.name }}', event)">Удалить</button>
-            <!-- Add a quantity input field -->
+            
             <input type="number" min="1" value="{{ item.quantity }}" class="product-quantity-input" data-product-id="{{ item.product.id }}">
         </div>
         {% endfor %}
@@ -48,26 +48,27 @@
 
 
 
-<div class="saved-cart">
-    <h3>Сохраненные корзины</h3>
+
     <div class="saved-cart-items">
         {% for user_cart in saved_carts %}
         <div class="saved-cart-item">
-            <h4>{{ user_cart.name }}</h4>
+            <h4>Корзина {{user.username}}</h4>
             <button class="show-cart-button" onclick="showCart('{{ user_cart.id }}')">Показать</button>
             <div class="cart-products" id="cart-products-{{ user_cart.id }}" style="display: none;">
                 <ul>
                     <button class="delete-cart-button" onclick="deleteCart('{{ user_cart.id }}')">Удалить корзину</button>
                     {% for selected_product in user_cart.selectedproduct_set.all %}
                     <li>{{ selected_product.product.name }} - {{ selected_product.quantity }} шт</li>
-                    
+            
                     {% endfor %}
+                
                 </ul>
+                <p>Итоговая стоимость: {{ user_cart.total_amount }} руб<p>
             </div>
         </div>
         {% endfor %}
     </div>
-</div>
+
 
 
 
