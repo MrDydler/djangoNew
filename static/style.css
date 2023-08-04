@@ -431,3 +431,13 @@
   border-radius: 5px;
   -webkit-text-fill-color: #ccc;
 }
+
+.delete-cart-button{
+  -webkit-text-fill-color: #333;
+
+
+}
+
+.show-cart-button{
+  -webkit-text-fill-color: #333;
+}

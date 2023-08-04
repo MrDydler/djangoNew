@@ -170,7 +170,7 @@
 } */
 
 .show {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -430,4 +430,10 @@
   padding: 3px;
   border-radius: 5px;
   -webkit-text-fill-color: #ccc;
+}
+
+.delete-cart-button{
+  -webkit-text-fill-color: #333;
+
+
 }

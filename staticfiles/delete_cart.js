@@ -20,8 +20,11 @@ function deleteCart(cartId) {
             // Handle the response from the server
             if (data.success) {
                 alert('Cart deleted successfully!');
-                // Optionally, you can reload the page to update the cart list
-                window.location.reload();
+                // Remove the cart from the DOM
+                const cartElement = document.getElementById(`cart-${cartId}`);
+                if (cartElement) {
+                    cartElement.remove();
+                }
             } else {
                 alert('Error deleting cart.');
             }
