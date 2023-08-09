@@ -79,6 +79,11 @@
             <div class="product-content">    
                 <p>{{ product.description }}</p>
                 <p>Цена: {{ product.price }} руб</p>
+                {% if product.id in remaining_quantities %}
+                <p>Остаток: {{ remaining_quantities|default:"N/A" }}</p>
+                {% else %}
+                <p>Остаток: N/A</p>
+                {% endif %}
                 <button class="buy-button" onclick="toggleRegForm('{{ product.id }}')">Купить</button>
             </div>
         </div>

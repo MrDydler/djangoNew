@@ -1,10 +1,19 @@
-from .models import Product, Buyer, RegisterForm, UserCart, SelectedProduct
-from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm
+from .models import Product, Buyer, RegisterForm, UserCart, SelectedProduct, Stock
+from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm,PasswordResetRequestForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.forms import SetPasswordForm
+from django.urls import reverse
 from datetime import datetime
 from django.db import IntegrityError
 from django.db.models import F, Sum
@@ -17,7 +26,10 @@ def demo_page(request):
     # Получаем все продукты
     products = Product.objects.all()
     success = False
-
+    product_quantities = Stock.objects.values('product').annotate(total_quantity=Sum('quantity'))
+    print("product_quantities ", product_quantities)
+    remaining_quantities = {item['product']: item['total_quantity'] for item in product_quantities}
+    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -43,7 +55,8 @@ def demo_page(request):
     context = {
         'products': products,
         'form': form,
-        'success': success
+        'success': success,
+        'remaining_quantities': remaining_quantities,
     }
 
     return render(request, 'demo.html', context)
@@ -212,3 +225,50 @@ def delete_cart(request):
             return JsonResponse({'success': True})
 
     return JsonResponse({'error': 'Неверный метод запроса.'}, status=400)
+
+#восстановление пароля
+def password_reset_request(request):
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+
+            current_site = get_current_site(request)
+            subject = 'Reset your password'
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+            reset_url = f"{current_site}{reset_link}"
+
+            message = render_to_string('password_reset_email.html', {
+                'user': user,
+                'reset_url': reset_url,
+                'domain': current_site.domain,
+            })
+            
+            send_mail(subject, message, 'noreply@example.com', [email])
+            return redirect('password_reset_done')
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, 'password_reset_request.html', {'form': form})
+
+
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('password_reset_complete')
+        else:
+            form = SetPasswordForm(user)
+        return render(request, 'password_reset_confirm.html', {'form': form})
+    else:
+        return render(request, 'password_reset_invalid.html')

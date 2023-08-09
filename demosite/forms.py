@@ -44,3 +44,6 @@ class LoginForm(forms.Form):
             if not user:
                 raise forms.ValidationError("Неправильный пароль или имя пользователя.")
         return cleaned_data
+    
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label='Email')
