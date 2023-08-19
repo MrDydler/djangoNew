@@ -24,11 +24,12 @@
                 <div class="product-content">    
                     <p>{{ product.description }}</p>
                     <p>Цена: {{ product.price }} руб</p>
-                    
+                    <p>Остаток: {{ product.remaining_quantity }}</p>
                     <button class="buy-button" onclick="buyProduct('{{ product.id }}', '{{ product.name }}', event)">Купить</button>
                 </div>
             </div>
             {% endfor %}
+        <p>Остаток: {{ product.remaining_quantity }}</p>
         </div>
     </form>
 

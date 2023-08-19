@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+
 #когда купил
 class Buyer(models.Model):
     name = models.CharField(max_length=25, blank=False)
@@ -10,6 +12,8 @@ class Buyer(models.Model):
     quantity = models.IntegerField(default=0)
     def __str__(self):
         return f"{self.name} - {self.selected_product.name} ({self.quantity})"
+
+
 #кнопка купить
 class RegistrationForm(models.Model):
     name = models.CharField(max_length=255)
@@ -19,10 +23,6 @@ class RegistrationForm(models.Model):
 
     class Meta:
         unique_together = ('email',)
-        
-
-    
-    
     
 #Регистрация 
 class RegisterForm(models.Model):
@@ -58,7 +58,7 @@ class UserCart(models.Model):
 #остаток товара
 class Stock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.product.name} - {self.quantity} in stock"

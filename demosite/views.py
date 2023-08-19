@@ -24,7 +24,7 @@ import json
 # Вью для демонстрационной страницы
 def demo_page(request):
     # Получаем все продукты
-    products = Product.objects.all()
+    products = Product.objects.annotate(remaining_quantity=Sum('stock__quantity')).all()
     success = False
     product_quantities = Stock.objects.values('product').annotate(total_quantity=Sum('quantity'))
     print("product_quantities ", product_quantities)
@@ -125,11 +125,11 @@ def login_view(request):
 # Защита от неавторизованных пользователей, вью для dashboard
 @login_required
 def dashboard(request):
-    products = Product.objects.all()
+    products = Product.objects.annotate(remaining_quantity=Sum('stock__quantity')).all()
     saved_carts = UserCart.objects.filter(user=request.user)
     print('Сохраненные корзины: ', saved_carts)
     return render(request, 'user.html', {'products': products, 'saved_carts': saved_carts})
-
+    
 # Функция для добавления товара в корзину
 from django.contrib.auth import get_user_model
 from .models import Product, Buyer, RegisterForm, SelectedProduct, UserCart
