@@ -39,14 +39,14 @@ function buyProduct(productId, productName, event, saveCart = false) {
         deleteButton.textContent = 'Удалить';
         deleteButton.onclick = function () {
             shoppingCart.removeChild(productDiv);
-            alert('Product removed from the cart.');
+            alert('Продукт удален из корзины.');
         };
 
         // Append the product div and delete button to the shopping cart
         productDiv.appendChild(deleteButton);
         shoppingCart.appendChild(productDiv);
 
-        alert('Product added to the cart.');
+        alert('Продукт добавлен в корзину.');
 
         // If saveCart is true, call the saveCart function to save the cart
         if (saveCart) {

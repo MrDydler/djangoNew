@@ -437,3 +437,21 @@
 
 
 }
+
+
+.show-cart-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-top: 10px; 
+}
+
+.show-cart-button:hover {
+  background-color: #45a049;
+  transform: scale(0.95);
+}

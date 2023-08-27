@@ -10,13 +10,14 @@ function saveCart() {
 
     // Создаем объект для хранения данных корзины (идентификатор продукта в качестве ключа, количество в качестве значения)
     const cartData = {};
+    
     cartItems.forEach(function (item) {
         const productId = item.dataset.productId;
         const productQuantityElement = item.querySelector('.product-quantity-input');
         const productQuantity = productQuantityElement ? parseInt(productQuantityElement.value) : 0;
         cartData[productId] = productQuantity;
     });
-
+    
     // Получаем CSRF-токен из куков
     const csrfToken = getCookie('csrftoken');
 
@@ -52,7 +53,13 @@ function saveCart() {
 
 function showCart(cartId) {
     const cartProducts = document.getElementById(`cart-products-${cartId}`);
-    cartProducts.style.display = 'block';
+    
+    // Проверяем текущее состояние отображения корзины
+    if (cartProducts.style.display === 'block') {
+        cartProducts.style.display = 'none';
+    } else { 
+        cartProducts.style.display = 'block';
+    }
 }
 
 // Функция для получения CSRF-токена из куков

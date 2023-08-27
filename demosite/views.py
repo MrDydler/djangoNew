@@ -36,7 +36,7 @@ def demo_page(request):
             product_id = request.POST.get('product_id')
             product = Product.objects.get(pk=product_id)
 
-            # Создаем новую запись о покупателе
+            
             buyer = Buyer(
                 name=form.cleaned_data['name'],
                 phone=form.cleaned_data['phone'],
@@ -99,7 +99,7 @@ def reg_submit(request):
                 form.add_error('email', 'Пользователь с таким email уже существует.')
                 print('email уже существует')
             else:
-                # If the username and email are unique, proceed with registration
+                # если уникальные имя пользователя и email - продолжаем регу
                 registration = RegisterForm(
                     login=form.cleaned_data['login'],
                     email=form.cleaned_data['email'],
@@ -133,7 +133,7 @@ def dashboard(request):
 # Функция для добавления товара в корзину
 from django.contrib.auth import get_user_model
 from .models import Product, Buyer, RegisterForm, SelectedProduct, UserCart
-
+#Добавление товаров в корзину
 def add_to_cart(request):
     if request.method == 'POST':
         print("Функция add_to_cart вызвана.")
@@ -186,18 +186,28 @@ def save_cart(request):
                 # Находим продукт на основе его идентификатора
                 product = Product.objects.get(pk=product_id)
 
-                # Создаем экземпляр SelectedProduct и связываем его с корзиной пользователя
-                selected_product, created = SelectedProduct.objects.get_or_create(
-                    user_cart=user_cart,
-                    product=product
-                )
-                selected_product.quantity = product_quantity
-                selected_product.save()
+                # Получаем остаток товара из Stock модели
+                stock_quantity = Stock.objects.get(product=product).quantity
 
-                # Рассчитываем общую стоимость корзины
-                total_amount += product.price * product_quantity
+                # Проверяем, что выбранное количество не превышает остаток
+                if product_quantity <= stock_quantity:
+                    # Создаем экземпляр SelectedProduct и связываем его с корзиной пользователя
+                    selected_product, created = SelectedProduct.objects.get_or_create(
+                        user_cart=user_cart,
+                        product=product
+                    )
+                    stock = Stock.objects.get(product=product)
+                    stock.quantity -= product_quantity
+                    stock.save()
+                    selected_product.quantity = product_quantity
+                    selected_product.save()
 
-            except Product.DoesNotExist:
+                    # Рассчитываем общую стоимость корзины
+                    total_amount += product.price * product_quantity
+                else:
+                    return JsonResponse({'error': f'Выбранное количество товара {product.name} превышает остаток в наличии.'})
+
+            except (Product.DoesNotExist, Stock.DoesNotExist):
                 # Обрабатываем случай, когда продукт с указанным идентификатором не существует
                 pass
 

@@ -10,13 +10,14 @@ function saveCart() {
 
     // Создаем объект для хранения данных корзины (идентификатор продукта в качестве ключа, количество в качестве значения)
     const cartData = {};
+    
     cartItems.forEach(function (item) {
         const productId = item.dataset.productId;
         const productQuantityElement = item.querySelector('.product-quantity-input');
         const productQuantity = productQuantityElement ? parseInt(productQuantityElement.value) : 0;
         cartData[productId] = productQuantity;
     });
-
+    
     // Получаем CSRF-токен из куков
     const csrfToken = getCookie('csrftoken');
 
