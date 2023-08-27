@@ -15,7 +15,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.forms import SetPasswordForm
 from django.urls import reverse
 from datetime import datetime
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import F, Sum
 from django.http import JsonResponse
 import logging
@@ -228,6 +228,15 @@ def delete_cart(request):
 
         if cart_id:
             user_cart = get_object_or_404(UserCart, id=cart_id, user=request.user)
+            
+            # Use a transaction to ensure data consistency
+            with transaction.atomic():
+                # Restore stock quantities for products in the cart
+                for selected_product in user_cart.selectedproduct_set.all():
+                    stock = Stock.objects.get(product=selected_product.product)
+                    stock.quantity += selected_product.quantity
+                    stock.save()
+            
             # Удаляем связанные объекты SelectedProduct
             user_cart.selectedproduct_set.all().delete()
             # Удаляем объект UserCart
