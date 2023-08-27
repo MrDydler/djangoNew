@@ -1,4 +1,4 @@
-from .models import Product, Buyer, RegisterForm, UserCart, SelectedProduct, Stock
+from .models import Product, Buyer, RegisterForm, UserCart, SelectedProduct, Stock, Warehouse
 from .forms import RegistrationForm, DjangoRegistrationForm, LoginForm,PasswordResetRequestForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
@@ -291,3 +291,25 @@ def password_reset_confirm(request, uidb64, token):
         return render(request, 'password_reset_confirm.html', {'form': form})
     else:
         return render(request, 'password_reset_invalid.html')
+    
+    
+# TRANSFERS 
+
+def manage_warehouse(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product')
+        quantity = request.POST.get('quantity')
+        
+        try:
+            product = Product.objects.get(pk=product_id)
+            warehouse, created = Warehouse.objects.get_or_create(product=product)
+            warehouse.quantity = quantity
+            warehouse.save()
+            return redirect('success_url')  # редирект на страницу подтверждения
+        except Product.DoesNotExist:
+            # продукт не найден
+            pass
+
+    products = Product.objects.all()
+    warehouses = Warehouse.objects.all()
+    return render(request, 'warehouse_form.html', {'products': products, 'warehouses': warehouses})
