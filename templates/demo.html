@@ -79,7 +79,7 @@
             <div class="product-content">    
                 <p>{{ product.description }}</p>
                 <p>Цена: {{ product.price }} руб</p>
-                <button class="buy-button" onclick="showRegistrationForm('{{ product.id }}')">Купить</button>
+                <button class="buy-button" onclick="toggleRegForm('{{ product.id }}')">Купить</button>
             </div>
         </div>
         {% endfor %}

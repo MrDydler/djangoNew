@@ -31,12 +31,22 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
+    #loginForm
     path('form_submit/', views.form_submit, name='form_submit'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('reg_submit/',views.reg_submit, name='reg_submit'),
-    path('user/', views.dashboard, name='user')
-
-    
+    path('user/', views.dashboard, name='user'),
+    #корзина
+    path('add_to_cart/', views.add_to_cart, name='add_to_cart'),
+    path('save_cart/', views.save_cart, name='save_cart'),
+    path('delete_cart/', views.delete_cart, name='delete_cart'),
+    #восстановление пароля
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    #перенос склад-прод
+    path('manage_warehouse/', views.manage_warehouse, name='manage_warehouse'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

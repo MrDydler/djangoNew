@@ -22,13 +22,6 @@ class DjangoRegistrationForm(forms.ModelForm):
 class LoginForm(AuthenticationForm):
     def get_success_url(self):
         return reverse_lazy('dashboard')
-#      #class Meta:
-#      #    model = User
-#       #   fields = '__all__'
-#     #pass  
-    
-# class LoginForm(AuthenticationForm):
-#     pass
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
@@ -44,3 +37,7 @@ class LoginForm(forms.Form):
             if not user:
                 raise forms.ValidationError("Неправильный пароль или имя пользователя.")
         return cleaned_data
+    
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    

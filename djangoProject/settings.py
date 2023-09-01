@@ -47,8 +47,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
-    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'  
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -89,6 +88,21 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.views.save_cart': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # You can adjust the logging level here (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        },
+    },
+}
 
 
 
@@ -137,3 +151,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import mimetypes
+
+mimetypes.add_type("text/javascript", ".js", True)
+
+
+# Email настройки отправления восстановления
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # бэк на SMTP
+EMAIL_HOST = 'smtp.yandex.ru'  # SMTP хост
+EMAIL_PORT = 465  # SMTP порт
+EMAIL_USE_TLS = False  # смотрим по инструкции почтового сервиса
+EMAIL_USE_SSL = True  # смотрим по инструкции почтового сервиса
+EMAIL_HOST_USER = 'MrDydler@yandex.ru'  # емейл отправителя
+EMAIL_HOST_PASSWORD = '*'  # пароль от приложений
