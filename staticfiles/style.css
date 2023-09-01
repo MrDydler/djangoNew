@@ -122,7 +122,7 @@
 }
 
 .show {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -158,7 +158,15 @@
   font-family: Luminari, fantasy;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center
+ 
+}
+
+.registration-button {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  z-index: 9999;
 }
 
 .registration-button {
@@ -300,4 +308,113 @@
   font-size: 14px;
   color: #666;
 }
+<<<<<<< HEAD
   
+=======
+
+.login-form{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  background-color: rgb(23, 11, 11);
+  text-align: center;
+  width: 400px;
+  height: 400px;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999
+}
+
+.about-us-login{
+  background: fixed;
+  background-image: url("djangoProject/media/background/footer.jpg");
+  opacity: 0.8; /* Replace with the path to your image */
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+  border: 3px solid #ccc;
+  border-radius: 30px;
+  color:azure;
+  font-size: 20px;
+  font-family: Luminari, fantasy;
+  bottom:20px;
+  position: absolute;
+  width: -moz-available
+}
+
+
+.blackout-login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Adjust the opacity as needed */
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Add this CSS to your existing styles.css or create a new CSS file and include it in the template */
+.saved-cart {
+  position: fixed;
+  top: 355px;
+  right: 10px;
+  background-color: #655a5a;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: inherit;
+  border: 3px;
+  border-radius:3px;
+  -webkit-text-fill-color: #ccc;
+}
+
+.saved-cart h3 {
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.saved-cart-items {
+  position: fixed;
+  top: 410px;
+  right: 15px;
+  background-color: #4a4848;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 3px;
+  border-radius: 5px;
+  -webkit-text-fill-color: #ccc;
+}
+
+.delete-cart-button{
+  -webkit-text-fill-color: #333;
+
+
+}
+
+
+.show-cart-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-top: 10px; 
+}
+
+.show-cart-button:hover {
+  background-color: #45a049;
+  transform: scale(0.95);
+}
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e

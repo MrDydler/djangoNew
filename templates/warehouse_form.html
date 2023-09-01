@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Warehouse</title>
+</head>
+<body>
+    <h1>Manage Warehouse</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="product">Product:</label>
+        <select name="product" required>
+            <option value="">Select a product</option>
+            {% for product in products %}
+                <option value="{{ product.id }}">{{ product.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" required>
+        
+        <button type="submit">Submit</button>
+    </form>
+    
+    <h2>Warehouse Entries:</h2>
+    <ul>
+        {% for warehouse in warehouses %}
+            <li>{{ warehouse.product.name }} - {{ warehouse.quantity }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

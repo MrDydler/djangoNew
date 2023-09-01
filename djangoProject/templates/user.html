@@ -1,0 +1,88 @@
+
+<!-- user.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    {% load static %}
+    {% block css_additional %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% endblock %}
+</head>
+<body>
+    <div class="header">
+        <h1>Добро пожаловать, {{ user.username }} !</h1>
+        <a href="{% url 'logout' %}">Выйти</a>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="product-list">
+            {% for product in products %}
+            <div class="product">
+                <h3>{{ product.name }}</h3>
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                <div class="product-content">    
+                    <p>{{ product.description }}</p>
+                    <p>Цена: {{ product.price }} руб</p>
+                    <p>Остаток: {{ product.remaining_quantity }}</p>
+                    <button class="buy-button" onclick="buyProduct('{{ product.id }}', '{{ product.name }}', event)">Купить</button>
+                </div>
+            </div>
+            {% endfor %}
+        <p>Остаток: {{ product.remaining_quantity }}</p>
+        </div>
+    </form>
+
+    <div class="user-cart">
+        <h3>Корзина пользователя</h3>
+        {% for item in request.user.selectedproduct_set.all %}
+        <div data-product-id="{{ item.product.id }}" class="cart-item">
+            <p>{{ item.product.name }} - <span class="product-quantity">{{ item.quantity }} шт</span></p>
+            
+            <button class="delete-button" onclick="deleteProduct('{{ item.product.name }}', event)">Удалить</button>
+            
+            <input type="number" min="1" value="{{ item.quantity }}" class="product-quantity-input" data-product-id="{{ item.product.id }}">
+        </div>
+        {% endfor %}
+        <button class="buy-in-cart-button" onclick="saveCart()">Сохранить корзину</button>
+    </div> 
+
+
+
+
+    <div class="saved-cart-items">
+        {% for user_cart in saved_carts %}
+        <div class="saved-cart-item">
+            <h4>Корзина {{user.username}}</h4>
+            <button class="show-cart-button" onclick="showCart('{{ user_cart.id }}')">Показать</button>
+            <div class="cart-products" id="cart-products-{{ user_cart.id }}" style="display: none;">
+                <ul>
+                    <button class="delete-cart-button" onclick="deleteCart('{{ user_cart.id }}')">Удалить корзину</button>
+                    {% for selected_product in user_cart.selectedproduct_set.all %}
+                    <li>{{ selected_product.product.name }} - {{ selected_product.quantity }} шт</li>
+            
+                    {% endfor %}
+                
+                </ul>
+                <p>Итоговая стоимость: {{ user_cart.total_amount }} руб<p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+
+    <div class="about-us">
+        <h2>О нас</h2>
+        <p>Мы - самый лучший ювелирный магазин!</p>
+        <p>Покупайте наши украшения. После оформления покупки с Вами свяжется специалист.</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'delete_cart.js' %}"></script>
+    <script src="{% static 'buy_product.js' %}"></script>
+    <script src="{% static 'save_cart.js' %}"></script>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>

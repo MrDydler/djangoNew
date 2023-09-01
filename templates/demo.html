@@ -79,6 +79,10 @@
             <div class="product-content">    
                 <p>{{ product.description }}</p>
                 <p>Цена: {{ product.price }} руб</p>
+<<<<<<< HEAD
+=======
+                <p>Остаток: {{ product.remaining_quantity }}</p>
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e
                 <button class="buy-button" onclick="toggleRegForm('{{ product.id }}')">Купить</button>
             </div>
         </div>
@@ -91,30 +95,7 @@
         <p>Покупайте наши украшения. После оформления покупки с Вами свяжется специалист.</p>
     </div>
 
-    {% comment %} <div class="overlay" id="overlay"><!-- поля кнопки "купить" --> {% endcomment %}
-        <div class="registration-container" id="registrationContainer">
-            <h2>Оформление</h2>
-            <form method="post" action="{% url 'demo' %}">
-                {% csrf_token %}
-
-                <input type="hidden" id="product_id" name="product_id" value="">
-
-                <label for="name">Имя:</label>
-                <input type="text" id="name" name="name">
-
-             <label for="phone">Телефон:</label>
-             <input type="text" id="phone" name="phone">
-
-             <label for="email">Email:</label>
-             <input type="email" id="email" name="email">
-
-            <label for="message">Сообщение:</label>
-             <textarea id="message" name="message"></textarea>
-
-            <button type="submit">Отправить</button>
-        </form>
-    </div>
-
+    
     <div id="successMessage" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:60px; background-color: green">
         Ваша заявка принята
     </div>

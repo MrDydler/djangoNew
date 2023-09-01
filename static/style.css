@@ -400,4 +400,48 @@
   display: flex;
   justify-content: center;
   align-items: center;
+<<<<<<< HEAD
 }
+=======
+}
+
+/* Add this CSS to your existing styles.css or create a new CSS file and include it in the template */
+.saved-cart {
+  position: fixed;
+  top: 355px;
+  right: 10px;
+  background-color: #655a5a;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: inherit;
+  border: 3px;
+  border-radius:3px;
+  -webkit-text-fill-color: #ccc;
+}
+
+.saved-cart h3 {
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.saved-cart-items {
+  position: fixed;
+  top: 410px;
+  right: 15px;
+  background-color: #4a4848;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 3px;
+  border-radius: 5px;
+  -webkit-text-fill-color: #ccc;
+}
+
+.delete-cart-button{
+  -webkit-text-fill-color: #333;
+
+
+}
+
+.show-cart-button{
+  -webkit-text-fill-color: #333;
+}
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e

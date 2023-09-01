@@ -28,6 +28,7 @@
         {% endfor %}
     </div>
 
+<<<<<<< HEAD
     <div class="user-cart">
         <h3>Корзина</h3>
         {% for item in request.user.selectedproduct_set.all %}
@@ -38,6 +39,24 @@
         </div>
         {% endfor %}
     </div>   
+=======
+    <div class="login-form">
+        <h2>Авторизация</h2>
+        <form method="post" action="{% url 'form_submit' %}">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="username">Имя пользователя:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-field">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Войти</button>
+            <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+        </form>
+    </div>
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e
 
     <div class="about-us">
         <h2>О нас</h2>

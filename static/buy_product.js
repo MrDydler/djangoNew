@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 // buy_product.js
 function buyProduct(productId, productName, event) {
+=======
+buy_product.js
+function buyProduct(productId, productName, event, saveCart = false) {
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e
     event.preventDefault();
     console.log('buyProduct function called.');
 
@@ -12,9 +17,18 @@ function buyProduct(productId, productName, event) {
     if (existingProduct) {
         // If the product already exists, update its quantity
         const productQuantityElement = existingProduct.querySelector('.product-quantity');
+<<<<<<< HEAD
         if (productQuantityElement) {
             const currentQuantity = parseInt(productQuantityElement.textContent);
             productQuantityElement.textContent = currentQuantity + 1;
+=======
+        const currentQuantity = parseInt(productQuantityElement.textContent);
+        const quantityInput = prompt(`Enter the quantity of ${productName} you want to add:`, currentQuantity);
+
+        if (quantityInput !== null) {
+            const newQuantity = parseInt(quantityInput);
+            productQuantityElement.textContent = newQuantity;
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e
             alert('Product quantity updated in the cart.');
         }
     } else {
@@ -23,18 +37,52 @@ function buyProduct(productId, productName, event) {
         productDiv.dataset.productId = productId;
         productDiv.textContent = productName;
 
+<<<<<<< HEAD
         // Create a delete button for the product
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Удалить';
         deleteButton.onclick = function() {
             shoppingCart.removeChild(productDiv);
             alert('Product removed from the cart.');
+=======
+        // Create a quantity input field
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.value = '1';
+        quantityInput.min = '1';
+        quantityInput.classList.add('product-quantity-input');
+        productDiv.appendChild(quantityInput);
+
+        // Create a delete button for the product
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Удалить';
+        deleteButton.onclick = function () {
+            shoppingCart.removeChild(productDiv);
+            alert('Продукт удален из корзины.');
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e
         };
 
         // Append the product div and delete button to the shopping cart
         productDiv.appendChild(deleteButton);
         shoppingCart.appendChild(productDiv);
 
+<<<<<<< HEAD
         alert('Product added to the cart.');
     }
 }
+=======
+        alert('Продукт добавлен в корзину.');
+
+        // If saveCart is true, call the saveCart function to save the cart
+        if (saveCart) {
+            saveCart();
+        }
+    }
+}
+
+
+function buyInCart() {
+    // Trigger the "Buy in cart" functionality by clicking the "Buy in cart" button
+    document.querySelector('.buy-in-cart-button').click();
+}
+>>>>>>> b5b69d5ebaa383dfce01b65de7d0cb7f0b09e35e
